@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="680" height="480" viewBox="0 0 680 480">
-  <rect width="100%" height="100%" fill="aliceblue" />
-  <defs>
+<rect width="100%" height="100%" fill="aliceblue" />
+  
+<defs>
     <style>
       .cell { fill:#f6f6f6; stroke:#333; stroke-width:1; }
       .cell-text { font-family:Arial, Helvetica, sans-serif; font-size:14px; fill:#111; dominant-baseline:middle; text-anchor:middle; }
-      .kernel-box { fill:#fff8e1; stroke:#c67f00; stroke-width:2; }
+      .window-box { fill:#fff8e1; stroke:#c67f00; stroke-width:2; }
       .highlight { fill:none; stroke:#e53935; stroke-width:3; }
       .result-cell { fill:#f0f8ff; stroke:#2b6ea3; stroke-width:1.5; }
-      .result-text { font-family:Arial, Helvetica, sans-serif; font-size:18px; fill:#0b57a4; text-anchor:middle; dominant-baseline:middle; }
+      .result-text { font-family:Arial, Helvetica, sans-serif; font-size:20px; fill:#0b57a4; text-anchor:middle; dominant-baseline:middle; }
       .breakdown { font-family:Arial, Helvetica, sans-serif; font-size:13px; fill:#333; }
     </style>
   </defs>
 
   <!-- Title -->
   <text x="20" y="28" font-family="Arial, Helvetica, sans-serif" font-size="18" fill="#222">
-    2×2 Max pooling animation (input 4×4, stride 1)
+    2×2 Max pooling (stride 2)
   </text>
 
-  <!-- Input 4x4 -->
+  <!-- Input 4×4 -->
   <rect class="cell" x="50" y="50" width="40" height="40"/><text class="cell-text" x="70" y="70">1</text>
   <rect class="cell" x="90" y="50" width="40" height="40"/><text class="cell-text" x="110" y="70">2</text>
   <rect class="cell" x="130" y="50" width="40" height="40"/><text class="cell-text" x="150" y="70">3</text>
@@ -39,117 +40,138 @@
   <rect class="cell" x="130" y="170" width="40" height="40"/><text class="cell-text" x="150" y="190">15</text>
   <rect class="cell" x="170" y="170" width="40" height="40"/><text class="cell-text" x="190" y="190">16</text>
 
-  <!-- Kernel (visual only) -->
+  <!-- Window visual (for reference) -->
   <g transform="translate(260,50)">
-    <rect class="kernel-box" x="0" y="0" width="80" height="80" rx="4" ry="4"/>
-    <text x="40" y="-6" font-family="Arial" font-size="13" text-anchor="middle" fill="#c67f00">Window 2×2</text>
+    <rect class="window-box" x="0" y="0" width="80" height="80" rx="4" ry="4"/>
+    <text x="40" y="-6" font-family="Arial" font-size="13" text-anchor="middle" fill="#c67f00">2×2 window</text>
     <rect x="8" y="8" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="24" y="24">a</text>
     <rect x="40" y="8" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="56" y="24">b</text>
     <rect x="8" y="40" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="24" y="56">c</text>
     <rect x="40" y="40" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="56" y="56">d</text>
   </g>
 
-  <!-- Highlight rectangle slides across 9 positions (3x3) -->
+  <!-- Highlight rectangle moves across 4 stride-2 positions once, then hides -->
   <rect class="highlight" x="50" y="50" width="80" height="80" rx="2" ry="2">
-    <animate attributeName="x" dur="9s" repeatCount="indefinite" calcMode="discrete"
-             values="50;90;130;50;90;130;50;90;130"/>
-    <animate attributeName="y" dur="9s" repeatCount="indefinite" calcMode="discrete"
-             values="50;50;50;90;90;90;130;130;130"/>
+    <animate attributeName="x"
+             dur="4s"
+             begin="0s"
+             repeatCount="1"
+             calcMode="discrete"
+             values="50;130;50;130"
+             fill="freeze"/>
+    <animate attributeName="y"
+             dur="4s"
+             begin="0s"
+             repeatCount="1"
+             calcMode="discrete"
+             values="50;50;130;130"
+             fill="freeze"/>
+    <animate attributeName="opacity"
+             dur="0.001s"
+             begin="4s"
+             fill="freeze"
+             values="1;0"/>
   </rect>
 
-  <!-- Output 3x3 grid: each max appears at its step and stays (cumulative) -->
-  <g transform="translate(420,50)">
-    <!-- Step 1: {1,2,5,6} -> max 6 -->
-    <rect class="result-cell" x="0" y="0" width="60" height="60"/>
-    <text class="result-text" x="30" y="34" opacity="0">6
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="0s" fill="freeze"/>
+  <!-- Output 2×2 grid (cumulative reveal). Each value appears at its step and stays visible. -->
+  <g transform="translate(420,70)">
+    <!-- top-left (step 0) -> max of {1,2,5,6} = 6 -->
+    <rect class="result-cell" x="0" y="0" width="80" height="80"/>
+    <text class="result-text" x="40" y="44" opacity="0">6
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="1;1;1;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
 
-    <!-- Step 2: {2,3,6,7} -> max 7 -->
-    <rect class="result-cell" x="70" y="0" width="60" height="60"/>
-    <text class="result-text" x="100" y="34" opacity="0">7
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="1s" fill="freeze"/>
+    <!-- top-right (step 1) -> max of {3,4,7,8} = 8 -->
+    <rect class="result-cell" x="100" y="0" width="80" height="80"/>
+    <text class="result-text" x="140" y="44" opacity="0">8
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="0;1;1;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
 
-    <!-- Step 3: {3,4,7,8} -> max 8 -->
-    <rect class="result-cell" x="140" y="0" width="60" height="60"/>
-    <text class="result-text" x="170" y="34" opacity="0">8
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="2s" fill="freeze"/>
+    <!-- bottom-left (step 2) -> max of {9,10,13,14} = 14 -->
+    <rect class="result-cell" x="0" y="100" width="80" height="80"/>
+    <text class="result-text" x="40" y="144" opacity="0">14
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="0;0;1;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
 
-    <!-- Step 4: {5,6,9,10} -> max 10 -->
-    <rect class="result-cell" x="0" y="70" width="60" height="60"/>
-    <text class="result-text" x="30" y="104" opacity="0">10
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="3s" fill="freeze"/>
-    </text>
-
-    <!-- Step 5: {6,7,10,11} -> max 11 -->
-    <rect class="result-cell" x="70" y="70" width="60" height="60"/>
-    <text class="result-text" x="100" y="104" opacity="0">11
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="4s" fill="freeze"/>
-    </text>
-
-    <!-- Step 6: {7,8,11,12} -> max 12 -->
-    <rect class="result-cell" x="140" y="70" width="60" height="60"/>
-    <text class="result-text" x="170" y="104" opacity="0">12
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="5s" fill="freeze"/>
-    </text>
-
-    <!-- Step 7: {9,10,13,14} -> max 14 -->
-    <rect class="result-cell" x="0" y="140" width="60" height="60"/>
-    <text class="result-text" x="30" y="174" opacity="0">14
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="6s" fill="freeze"/>
-    </text>
-
-    <!-- Step 8: {10,11,14,15} -> max 15 -->
-    <rect class="result-cell" x="70" y="140" width="60" height="60"/>
-    <text class="result-text" x="100" y="174" opacity="0">15
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="7s" fill="freeze"/>
-    </text>
-
-    <!-- Step 9: {11,12,15,16} -> max 16 -->
-    <rect class="result-cell" x="140" y="140" width="60" height="60"/>
-    <text class="result-text" x="170" y="174" opacity="0">16
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="8s" fill="freeze"/>
+    <!-- bottom-right (step 3) -> max of {11,12,15,16} = 16 -->
+    <rect class="result-cell" x="100" y="100" width="80" height="80"/>
+    <text class="result-text" x="140" y="144" opacity="0">16
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="0;0;0;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
   </g>
 
-  <!-- Breakdown lines (appear in sync, cumulative) -->
+  <!-- Breakdown lines (cumulative reveal) -->
   <g transform="translate(20,240)">
     <text class="breakdown" x="0" y="0" opacity="0">1) Max of {1,2,5,6} = 6
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="0s" fill="freeze"/>
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="1;1;1;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
 
-    <text class="breakdown" x="0" y="20" opacity="0">2) Max of {2,3,6,7} = 7
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="1s" fill="freeze"/>
+    <text class="breakdown" x="0" y="20" opacity="0">2) Max of {3,4,7,8} = 8
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="0;1;1;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
 
-    <text class="breakdown" x="0" y="40" opacity="0">3) Max of {3,4,7,8} = 8
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="2s" fill="freeze"/>
+    <text class="breakdown" x="0" y="40" opacity="0">3) Max of {9,10,13,14} = 14
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="0;0;1;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
 
-    <text class="breakdown" x="0" y="60" opacity="0">4) Max of {5,6,9,10} = 10
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="3s" fill="freeze"/>
-    </text>
-
-    <text class="breakdown" x="0" y="80" opacity="0">5) Max of {6,7,10,11} = 11
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="4s" fill="freeze"/>
-    </text>
-
-    <text class="breakdown" x="0" y="100" opacity="0">6) Max of {7,8,11,12} = 12
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="5s" fill="freeze"/>
-    </text>
-
-    <text class="breakdown" x="0" y="120" opacity="0">7) Max of {9,10,13,14} = 14
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="6s" fill="freeze"/>
-    </text>
-
-    <text class="breakdown" x="0" y="140" opacity="0">8) Max of {10,11,14,15} = 15
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="7s" fill="freeze"/>
-    </text>
-
-    <text class="breakdown" x="0" y="160" opacity="0">9) Max of {11,12,15,16} = 16
-      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="8s" fill="freeze"/>
+    <text class="breakdown" x="0" y="60" opacity="0">4) Max of {11,12,15,16} = 16
+      <animate attributeName="opacity"
+               dur="4s"
+               begin="0s"
+               repeatCount="1"
+               calcMode="discrete"
+               values="0;0;0;1;1"
+               keyTimes="0;0.25;0.5;0.75;1"
+               fill="freeze"/>
     </text>
   </g>
 </svg>
