@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="360" viewBox="0 0 760 360">
+
+  <defs>
+    <style>
+      .cell { fill:#f6f6f6; stroke:#333; stroke-width:1; }
+      .cell-text { font-family:Arial; font-size:14px; fill:#111; dominant-baseline:middle; text-anchor:middle; }
+      .kernel-box { fill:#fff8e1; stroke:#c67f00; stroke-width:2; }
+      .highlight { fill:none; stroke:#e53935; stroke-width:3; }
+      .result-cell { fill:#f0f8ff; stroke:#2b6ea3; stroke-width:1.5; }
+      .result-text { font-family:Arial; font-size:18px; fill:#0b57a4; text-anchor:middle; dominant-baseline:middle; }
+      .breakdown { font-family:Arial; font-size:13px; fill:#333; }
+    </style>
+  </defs>
+
+  <!-- Title -->
+  <text x="20" y="28" font-family="Arial" font-size="18" fill="#222">2×2 Convolution animation (input 4×4, kernel [1 2; 3 4])</text>
+
+  <!-- Input 4x4 grid (values 1..16) -->
+  <!-- Row 0 -->
+  <rect class="cell" x="50" y="50" width="40" height="40"/><text class="cell-text" x="70" y="70">1</text>
+  <rect class="cell" x="90" y="50" width="40" height="40"/><text class="cell-text" x="110" y="70">2</text>
+  <rect class="cell" x="130" y="50" width="40" height="40"/><text class="cell-text" x="150" y="70">3</text>
+  <rect class="cell" x="170" y="50" width="40" height="40"/><text class="cell-text" x="190" y="70">4</text>
+
+  <!-- Row 1 -->
+  <rect class="cell" x="50" y="90" width="40" height="40"/><text class="cell-text" x="70" y="110">5</text>
+  <rect class="cell" x="90" y="90" width="40" height="40"/><text class="cell-text" x="110" y="110">6</text>
+  <rect class="cell" x="130" y="90" width="40" height="40"/><text class="cell-text" x="150" y="110">7</text>
+  <rect class="cell" x="170" y="90" width="40" height="40"/><text class="cell-text" x="190" y="110">8</text>
+
+  <!-- Row 2 -->
+  <rect class="cell" x="50" y="130" width="40" height="40"/><text class="cell-text" x="70" y="150">9</text>
+  <rect class="cell" x="90" y="130" width="40" height="40"/><text class="cell-text" x="110" y="150">10</text>
+  <rect class="cell" x="130" y="130" width="40" height="40"/><text class="cell-text" x="150" y="150">11</text>
+  <rect class="cell" x="170" y="130" width="40" height="40"/><text class="cell-text" x="190" y="150">12</text>
+
+  <!-- Row 3 -->
+  <rect class="cell" x="50" y="170" width="40" height="40"/><text class="cell-text" x="70" y="190">13</text>
+  <rect class="cell" x="90" y="170" width="40" height="40"/><text class="cell-text" x="110" y="190">14</text>
+  <rect class="cell" x="130" y="170" width="40" height="40"/><text class="cell-text" x="150" y="190">15</text>
+  <rect class="cell" x="170" y="170" width="40" height="40"/><text class="cell-text" x="190" y="190">16</text>
+
+  <!-- Kernel display -->
+  <g transform="translate(260,50)">
+    <rect class="kernel-box" x="0" y="0" width="80" height="80" rx="4" ry="4"/>
+    <text x="40" y="-6" font-family="Arial" font-size="13" text-anchor="middle" fill="#c67f00">Kernel 2×2</text>
+    <rect x="8" y="8" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="24" y="24">1</text>
+    <rect x="40" y="8" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="56" y="24">2</text>
+    <rect x="8" y="40" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="24" y="56">3</text>
+    <rect x="40" y="40" width="32" height="32" fill="#fff" stroke="#c67f00"/><text class="cell-text" x="56" y="56">4</text>
+  </g>
+
+  <!-- Animated highlight rectangle (2x2 window) moves through 9 positions -->
+  <rect class="highlight" x="50" y="50" width="80" height="80" rx="2" ry="2">
+    <animate attributeName="x"
+             dur="9s"
+             repeatCount="indefinite"
+             calcMode="discrete"
+             values="50;90;130;50;90;130;50;90;130"/>
+    <animate attributeName="y"
+             dur="9s"
+             repeatCount="indefinite"
+             calcMode="discrete"
+             values="50;50;50;90;90;90;130;130;130"/>
+  </rect>
+
+  <!-- Output 3x3 grid (results). Each result text appears when its corresponding window is highlighted -->
+  <g transform="translate(420,50)">
+    <!-- cell (0,0) -> 36 -->
+    <rect class="result-cell" x="0" y="0" width="60" height="60"/>
+    <text class="result-text" x="30" y="34" opacity="0">36
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="0s" fill="freeze"/>
+    </text>
+
+    <!-- cell (0,1) -> 54 -->
+    <rect class="result-cell" x="70" y="0" width="60" height="60"/>
+    <text class="result-text" x="100" y="34" opacity="0">54
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="1s" fill="freeze"/>
+    </text>
+
+    <!-- cell (0,2) -> 64 -->
+    <rect class="result-cell" x="140" y="0" width="60" height="60"/>
+    <text class="result-text" x="170" y="34" opacity="0">64
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="2s" fill="freeze"/>
+    </text>
+
+    <!-- cell (1,0) -> 84 -->
+    <rect class="result-cell" x="0" y="70" width="60" height="60"/>
+    <text class="result-text" x="30" y="104" opacity="0">84
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="3s" fill="freeze"/>
+    </text>
+
+    <!-- cell (1,1) -> 94 -->
+    <rect class="result-cell" x="70" y="70" width="60" height="60"/>
+    <text class="result-text" x="100" y="104" opacity="0">94
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="4s" fill="freeze"/>
+    </text>
+
+    <!-- cell (1,2) -> 104 -->
+    <rect class="result-cell" x="140" y="70" width="60" height="60"/>
+    <text class="result-text" x="170" y="104" opacity="0">104
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="5s" fill="freeze"/>
+    </text>
+
+    <!-- cell (2,0) -> 124 -->
+    <rect class="result-cell" x="0" y="140" width="60" height="60"/>
+    <text class="result-text" x="30" y="174" opacity="0">124
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="6s" fill="freeze"/>
+    </text>
+
+    <!-- cell (2,1) -> 134 -->
+    <rect class="result-cell" x="70" y="140" width="60" height="60"/>
+    <text class="result-text" x="100" y="174" opacity="0">134
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="7s" fill="freeze"/>
+    </text>
+
+    <!-- cell (2,2) -> 144 -->
+    <rect class="result-cell" x="140" y="140" width="60" height="60"/>
+    <text class="result-text" x="170" y="174" opacity="0">144
+      <animate attributeName="opacity" values="0;1" dur="0.1s" begin="8s" fill="freeze"/>
+    </text>
+  </g>
+
+  <!-- Animated breakdown lines (optional) -->
+  <g transform="translate(20,240)">
+    <text class="breakdown" x="0" y="0" opacity="0">1) {1,2,5,6} · {1,2,3,4} = 36
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="0s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="20" opacity="0">2) {2,3,6,7} · {1,2,3,4} = 54
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="1s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="40" opacity="0">3) {3,4,7,8} · {1,2,3,4} = 64
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="2s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="60" opacity="0">4) {5,6,9,10} · {1,2,3,4} = 84
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="3s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="80" opacity="0">5) {6,7,10,11} · {1,2,3,4} = 94
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="4s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="100" opacity="0">6) {7,8,11,12} · {1,2,3,4} = 104
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="5s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="120" opacity="0">7) {9,10,13,14} · {1,2,3,4} = 124
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="6s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="140" opacity="0">8) {10,11,14,15} · {1,2,3,4} = 134
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="7s" fill="freeze"/>
+    </text>
+    <text class="breakdown" x="0" y="160" opacity="0">9) {11,12,15,16} · {1,2,3,4} = 144
+      <animate attributeName="opacity" values="0;1;0" dur="1s" begin="8s" fill="freeze"/>
+    </text>
+  </g>
+
+  <text x="20" y="340" font-family="Arial" font-size="12" fill="#666">Animation loops every 9 seconds. Results appear in the 3×3 output grid in sync with the sliding window.</text>
+</svg>
